@@ -1,3 +1,54 @@
+# SAW commands
+
+# pointmaze-medium-navigate-v0
+python main.py --env_name=pointmaze-medium-navigate-v0 --eval_episodes=50 --agent=agents/saw.py
+# pointmaze-large-navigate-v0
+python main.py --env_name=pointmaze-large-navigate-v0 --eval_episodes=50 --agent=agents/saw.py
+# pointmaze-giant-navigate-v0
+python main.py --env_name=pointmaze-giant-navigate-v0 --eval_episodes=50 --agent=agents/saw.py --agent.discount=0.995
+
+# antmaze-medium-navigate-v0
+python main.py --env_name=antmaze-medium-navigate-v0 --eval_episodes=50 --agent=agents/saw.py
+# antmaze-large-navigate-v0
+python main.py --env_name=antmaze-large-navigate-v0 --eval_episodes=50 --agent=agents/saw.py
+# antmaze-medium-navigate-v0
+python main.py --env_name=antmaze-giant-navigate-v0 --eval_episodes=50 --agent=agents/saw.py --agent.discount=0.995
+
+# humanoidmaze-medium-navigate-v0
+python main.py --env_name=humanoidmaze-medium-navigate-v0 --eval_episodes=50 --agent=agents/saw.py --agent.discount=0.995 --agent.subgoal_steps=100
+# humanoidmaze-large-navigate-v0
+python main.py --env_name=humanoidmaze-large-navigate-v0 --eval_episodes=50 --agent=agents/saw.py --agent.discount=0.995 --agent.subgoal_steps=100
+# humanoidmaze-giant-navigate-v0
+python main.py --env_name=humanoidmaze-giant-navigate-v0 --eval_episodes=50 --agent=agents/saw.py --agent.discount=0.995 --agent.subgoal_steps=100
+
+# visual-antmaze-medium-navigate-v0
+python main.py --env_name=visual-antmaze-medium-navigate-v0 --train_steps=500000 --eval_episodes=50 --agent=agents/saw.py --agent.batch_size=256 --agent.encoder=impala_small --agent.share_goal_rep=True
+# visual-antmaze-large-navigate-v0
+python main.py --env_name=visual-antmaze-large-navigate-v0 --train_steps=500000 --eval_episodes=50 --agent=agents/saw.py --agent.batch_size=256 --agent.encoder=impala_small --agent.share_goal_rep=True
+# visual-antmaze-giant-navigate-v0
+python main.py --env_name=visual-antmaze-giant-navigate-v0 --train_steps=500000 --eval_episodes=50 --agent=agents/saw.py --agent.batch_size=256 --agent.discount=0.995 --agent.encoder=impala_small --agent.share_goal_rep=True
+
+# cube-single-play-v0
+python main.py --env_name=cube-single-play-v0 --eval_episodes=50 --agent=agents/saw.py --agent.kl_alpha=0.3 --agent.subgoal_steps=10 --agent.expectile=0.9
+# cube-double-play-v0
+python main.py --env_name=cube-double-play-v0 --eval_episodes=50 --agent=agents/saw.py --agent.kl_alpha=1.0 --agent.subgoal_steps=10
+# cube-triple-play-v0
+python main.py --env_name=cube-triple-play-v0 --eval_episodes=50 --agent=agents/saw.py --agent.kl_alpha=1.0 --agent.subgoal_steps=10
+
+# scene-play-v0
+python main.py --env_name=scene-play-v0 --eval_episodes=50 --agent=agents/saw.py --agent.kl_alpha=1.0 --agent.subgoal_steps=10
+
+# visual-cube-single-play-v0
+python main.py --env_name=visual-cube-single-play-v0 --train_steps=500000 --eval_episodes=50 --eval_on_cpu=0 --agent=agents/saw.py --agent.batch_size=256 --agent.encoder=impala_small --agent.share_goal_rep=True --agent.p_aug=0.5 --agent.subgoal_steps=10
+# visual-cube-double-play-v0
+python main.py --env_name=visual-cube-double-play-v0 --train_steps=500000 --eval_episodes=50 --eval_on_cpu=0 --agent=agents/saw.py --agent.batch_size=256 --agent.encoder=impala_small --agent.share_goal_rep=True --agent.p_aug=0.5 --agent.subgoal_steps=10
+# visual-cube-triple-play-v0
+python main.py --env_name=visual-cube-triple-play-v0 --train_steps=500000 --eval_episodes=50 --eval_on_cpu=0 --agent=agents/saw.py --agent.batch_size=256 --agent.encoder=impala_small --agent.share_goal_rep=True --agent.p_aug=0.5 --agent.subgoal_steps=10
+
+# visual-scene-play-v0
+python main.py --env_name=visual-scene-play-v0 --train_steps=500000 --eval_episodes=50 --eval_on_cpu=0 --agent=agents/saw.py --agent.batch_size=256 --agent.encoder=impala_small --agent.share_goal_rep=True --agent.p_aug=0.5 --agent.subgoal_steps=10
+
+
 # pointmaze-medium-navigate-v0 (GCBC)
 python main.py --env_name=pointmaze-medium-navigate-v0 --eval_episodes=50 --agent=agents/gcbc.py
 # pointmaze-medium-navigate-v0 (GCIVL)
