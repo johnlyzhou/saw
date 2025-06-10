@@ -1,8 +1,9 @@
 # Flattening Hierarchies with Policy Bootstrapping
+[Project Page](https://johnlyzhou.github.io/saw/)
 
 This is the official implementation of **Subgoal Advantage-Weighted Policy Bootstrapping** (**SAW**), built on a fork of the excellent OGBench codebase by Park et al. (2024). Run commands with hyperparameters from the paper can be found [here](https://github.com/johnlyzhou/saw/blob/master/impls/hyperparameters.sh#L1). We append the contents of the original OGBench README below for ease of reference.
 
-## [Project Page](https://johnlyzhou.github.io/saw/)
+#
 
 <div align="center">
 <img src="assets/ogbench.svg" width="300px"/>
