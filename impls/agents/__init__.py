@@ -7,6 +7,7 @@ from agents.qrl import QRLAgent
 from agents.sac import SACAgent
 from agents.saw import SAWAgent
 from agents.gcwae import GCWAEAgent
+from agents.ris import RISAgent
 
 agents = dict(
     crl=CRLAgent,
@@ -18,4 +19,5 @@ agents = dict(
     sac=SACAgent,
     saw=SAWAgent,
     gcwae=GCWAEAgent,
+    ris=RISAgent,
 )
