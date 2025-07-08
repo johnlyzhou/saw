@@ -1,6 +1,7 @@
 import tempfile
 import xml.etree.ElementTree as ET
 
+import mujoco
 import numpy as np
 from gymnasium.spaces import Box
 
@@ -166,6 +167,18 @@ def make_maze_env(loco_env_type, maze_env_type, *args, **kwargs):
 
             super().__init__(xml_file=maze_xml_file, *args, **kwargs)
 
+            # Make custom camera.
+            if self.camera_id is None and self.camera_name is None:
+                # Use a custom default view.
+                camera = mujoco.MjvCamera()
+                camera.lookat[0] = 2 * (self.maze_map.shape[1] - 3)
+                camera.lookat[1] = 2 * (self.maze_map.shape[0] - 3)
+                camera.distance = 5 * (self.maze_map.shape[1] - 2)
+                camera.elevation = -90
+                self.custom_camera = camera
+            else:
+                self.custom_camera = self.camera_id or self.camera_name
+
             # Set task goals.
             self.task_infos = []
             self.cur_task_id = None
@@ -174,6 +187,7 @@ def make_maze_env(loco_env_type, maze_env_type, *args, **kwargs):
             self.num_tasks = len(self.task_infos)
             self.cur_goal_xy = np.zeros(2)
 
+            self.custom_renderer = None
             if self._ob_type == 'pixels':
                 self.observation_space = Box(low=0, high=255, shape=(64, 64, 3), dtype=np.uint8)
 
@@ -192,17 +206,10 @@ def make_maze_env(loco_env_type, maze_env_type, *args, **kwargs):
                         r = int(x / tex_height * (max_value - min_value) + min_value)
                         g = int(y / tex_width * (max_value - min_value) + min_value)
                         tex_rgb[x, y, :] = [r, g, 128]
+                self.initialize_renderer()
             else:
                 ex_ob = self.get_ob()
                 self.observation_space = Box(low=-np.inf, high=np.inf, shape=ex_ob.shape, dtype=ex_ob.dtype)
-
-            # Set camera.
-            self.reset()
-            self.render()
-            self.mujoco_renderer.viewer.cam.lookat[0] = 2 * (self.maze_map.shape[1] - 3)
-            self.mujoco_renderer.viewer.cam.lookat[1] = 2 * (self.maze_map.shape[0] - 3)
-            self.mujoco_renderer.viewer.cam.distance = 5 * (self.maze_map.shape[1] - 2)
-            self.mujoco_renderer.viewer.cam.elevation = -90
 
         def update_tree(self, tree):
             """Update the XML tree to include the maze."""
@@ -348,6 +355,15 @@ def make_maze_env(loco_env_type, maze_env_type, *args, **kwargs):
             if self._reward_task_id == 0:
                 self._reward_task_id = 1  # Default task.
 
+        def initialize_renderer(self):
+            # Make custom renderer.
+            self.custom_renderer = mujoco.Renderer(
+                self.model,
+                width=self.width,
+                height=self.height,
+            )
+            self.render()
+
         def reset(self, options=None, *args, **kwargs):
             if options is None:
                 options = {}
@@ -438,6 +454,12 @@ def make_maze_env(loco_env_type, maze_env_type, *args, **kwargs):
 
             return ob, reward, terminated, truncated, info
 
+        def render(self):
+            if self.custom_renderer is None:
+                self.initialize_renderer()
+            self.custom_renderer.update_scene(self.data, camera=self.custom_camera)
+            return self.custom_renderer.render()
+
         def get_ob(self, ob_type=None):
             ob_type = self._ob_type if ob_type is None else ob_type
             if ob_type == 'states':
@@ -447,7 +469,7 @@ def make_maze_env(loco_env_type, maze_env_type, *args, **kwargs):
                 return frame
 
         def get_oracle_rep(self):
-            """Return the oracle goal representation (i.e., the goal position) of the current state."""
+            """Return the oracle goal representation (i.e., the goal position)."""
             return np.array(self.cur_goal_xy)
 
         def set_goal(self, goal_ij=None, goal_xy=None):
