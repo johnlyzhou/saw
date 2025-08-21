@@ -25,7 +25,6 @@ class SAWAgent(flax.struct.PyTreeNode):
         weight = jnp.where(adv >= 0, expectile, (1 - expectile))
         return weight * (diff**2)
 
-    @jax.jit
     def value_loss(self, batch, grad_params):
         """Compute the IVL value loss.
 
@@ -59,7 +58,6 @@ class SAWAgent(flax.struct.PyTreeNode):
             'v_min': v.min(),
         }
 
-    @jax.jit
     def target_actor_loss(self, batch, grad_params):
         """Compute the low-level actor loss. Note that we use this to bootstrap a flat policy."""
         v1, v2 = self.network.select('value')(batch['observations'], batch['low_actor_goals'])
@@ -91,7 +89,6 @@ class SAWAgent(flax.struct.PyTreeNode):
 
         return actor_loss, actor_info
 
-    @jax.jit
     def actor_loss(self, batch, grad_params):
         """Compute regular actor loss w.r.t. high-actor goals."""
         # Compute standard 1-step AWR loss
@@ -123,7 +120,6 @@ class SAWAgent(flax.struct.PyTreeNode):
 
         return awr_loss, awr_info
 
-    @jax.jit
     def waypoint_loss(self, batch, grad_params):
         """Compute the waypoint bootstrapping loss."""
         v1, v2 = self.network.select('value')(batch['observations'], batch['high_actor_goals'])
@@ -153,11 +149,9 @@ class SAWAgent(flax.struct.PyTreeNode):
 
         return waypoint_loss, waypoint_info
 
-    @jax.jit
     def total_loss(self, batch, grad_params=None, rng=None):
         """Compute the total loss (only for val)."""
         info = {}
-        rng = rng if rng is not None else self.rng
 
         value_loss, value_info = self.value_loss(batch, grad_params)
         for k, v in value_info.items():
