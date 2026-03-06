@@ -11,7 +11,7 @@ python main.py --env_name=pointmaze-giant-navigate-v0 --eval_episodes=50 --agent
 python main.py --env_name=antmaze-medium-navigate-v0 --eval_episodes=50 --agent=agents/saw.py
 # antmaze-large-navigate-v0
 python main.py --env_name=antmaze-large-navigate-v0 --eval_episodes=50 --agent=agents/saw.py
-# antmaze-medium-navigate-v0
+# antmaze-giant-navigate-v0
 python main.py --env_name=antmaze-giant-navigate-v0 --eval_episodes=50 --agent=agents/saw.py --agent.discount=0.995
 
 # humanoidmaze-medium-navigate-v0
